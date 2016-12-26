@@ -1,0 +1,11 @@
+valid Cause Code:
+00 = ok. Success
+01 = No Such user exists
+02 = No such game Exists
+03 = Requested user name already exists
+04 = Requested Puzzle already exists
+05 = Guessed letter already in guess history
+06 = User name and game ID mismatch
+07 = Value provided for Guess is invalid
+08 = undefined
+09 = undefined

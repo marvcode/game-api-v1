@@ -1,0 +1,94 @@
+# ###################################################################
+#
+# Written by: Marvin Fuller
+# date: November 2016
+# App: Hangman API
+#
+# ##################################################################
+
+The purpose of this document is to detail the design decisions that went into the Simple Game API project.
+
+>>What additional properties did you add to your models and why?
+*I decided to move the definitions of the Resource Containers and the datastore models to a separate file called hang_models.py in order to keep the main API file cleaner and easier to read.  
+*I created resource containers for each API function to better fit the hangman game.  
+*Also, I created a 'Generic Response' message with all the necessary fields that I would need to return to the user in order to give the user enough detil of the status of the APi function he/she just called.  Only one of the fields in the 'Generic Response' message is required, all other fields are optional so that I could use the fields that were needed based on the function being called.  The Generic Response message is listed below.
+
+class GenericResp(messages.Message):
+    """Define a response class that covers all request types."""
+    accepted = messages.BooleanField(1, required=True)
+    cause_code = messages.IntegerField(2, required=False)
+    game_id = messages.StringField(3, required=False)
+    word_size = messages.IntegerField(4, required=False)
+    num_guesses = messages.IntegerField(5, required=False)
+    num_misses = messages.IntegerField(6, required=False)
+    guess_history = messages.StringField(7, required=False)
+    miss_history = messages.StringField(8, required=False)
+    game_active = messages.IntegerField(9, required=False)
+    current = messages.StringField(11, required=False)
+    score = messages.IntegerField(12, required=False)
+    resp_info = messages.StringField(13, required=False)
+
+>>What were some of the trade-offs or struggles you faced when implementing the new game logic?
+Other critical decisions made during the design of the Hangman game API are listed below: 
+10/29/2016
+*I decided to separate game admin functions and game play functions into separate APIs.  I did this to keep the API functions logically straight-forward.
+*I decided to use the 'Accept' field within the Generic Response and a means to let the user know if the request was 'legal' or needs to be corrected based on the rules of the game.  The Accept field or 'acpt' is a boolean such that True means the API call was a legal move or request.
+
+10/31/2016
+*I decided to create a cause code field to signal why a request or a move was rejected.  The Cause Code definitions are:
+00 = ok. Success
+01 = No Such user exists
+02 = No such game Exists
+03 = Requested user name already exists
+04 = Requested Puzzle already exists
+05 = Guessed letter already in guess history
+06 = User name and game ID mismatch
+07 = Value provided for Guess is invalid
+08 = undefined
+09 = undefined
+
+11/5/2016
+*Defining the Score: I decided to use the folowing schema for hangman scoring:
+User is awarded +10 points for each correct letter guessed.
+Zero points are taken off for an incorrect letter guessed.
+User gets to bank points earned during game only if user completes the word successfully and solves the puzzle.
+If user loses game due to hung hangman, then all points gathered in this round are lost but does not affect already banked points.
+There are 6 body parts, this means user loses game upon guessing a 6th incorrect letter. 
+
+11/7/2016
+*I decided to create a API endpoint that allows any username in the datastore to add words to the puzzle database.  I found the following as a source for look into possibly using http://www.desiquintans.com/noungenerator?count=1 to generate random words
+
+sample word database: 
+Brick
+Chap
+Coffin
+Creche
+Cyst
+Fairies
+Hassock
+Missile
+Profession
+Trout 
+Addition
+Columnist
+Company
+Director
+Employer
+Helo
+Quality
+Ship
+Store 
+Almanac
+Chiffonier
+Heirloom
+Injury
+Meteorology
+Mobile
+Nonbeliever
+Nonconformist
+Rage
+Tourist 
+
+11/15/2016
+*I started with a database property of Active for each game entity.  My original intent was to use this as a boolean value to represent whether the game was still active or not.  Later, I decided to repurpose  this field as an integer to represent 3 states of 'Active'.  In which, 1=Active, 2=Solved, 3=Game Over (hung hangman). 
+
