@@ -166,14 +166,14 @@ email|*Specify the email address of the associated user.*<br>Type:String, Order:
 <b>Response Parameters |<b>Details</b>
 accepted|*Indicates that the request was legal or valid.*<br>This response field Type:Boolean, Order=1, Required=True  
 cause_code|*Indicates why request was not accepted.  See definition list of Cause Codes below.*<br>Type:Integer, Order=2, Required=False
-resp_info|*This is text field that helps provide additional infomation about the results of the request.*<br>Type:String, Order:13, Required=False
+resp_info|*This is text field that helps provide additional information about the results of the request.*<br>Type:String, Order:13, Required=False
 
 
 <br>
 ####/create_game  
 
-<b>Description:</b>  This function is used to create a new game.  
-<b>Usage:</b>  
+<b>Description:</b>  This function is used to create a new game.  This function will generate a random 4 character game_id as well as choose a random puzzle from the puzzle database.  
+<b>Usage:</b>
 `https://mf-game-api-v1.appspot.com/_ah/api/gameadmin/v1/create_game?level=level&user_name=user_name`  
 <b>Supported Methods:</b> `POST`  
 ><b> Example</b>:  
