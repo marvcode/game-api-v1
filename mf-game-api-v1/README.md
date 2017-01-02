@@ -9,7 +9,7 @@ When creating a game, the user may choose the challenge level of the puzzle by d
 
 ##Instructions for Game Play  
 ###1. Create a username
-To get started with Hangman, you must first create a username for yourself.  Each user will create their own username and provide an email address for the user.   
+To get started with Hangman, you must first create a username for yourself.  Each user will create their own username and provide an email address for the user.  <b> *NOTE: A username must begin with 2 lowercase alpha characters, followed by 3 or more digits and can have no spaces.</b>*
 
 `/create_user`  end point
 
@@ -140,7 +140,8 @@ Active game reminder emails will be sent out periodically.  *<b>Note: These emai
 All functions begin with 'https://mf-game-api-v1.appspot.com/_ah/api/gameadmin/v1'.  This group of API functions are used for administrative functions to support game play.  Each function is detailed below:  
 
 ####/create_user  
-<b>Description:</b> This function is used to create a new user into the database for the first time.  
+<b>Description:</b> This function is used to create a new user into the database for the first time.  <b> *NOTE: A username must begin with 2 lowercase characters, followed by 3 or more digits and can have no spaces.</b>*
+
 <b>Usage:</b> `https://mf-game-api-v1.appspot.com/_ah/api/gameadmin/v1/create_user?email=email&user_name=user_name`	
 
 <b>Supported Methods:</b> `POST`  
@@ -161,7 +162,7 @@ Show headers -
 
 Request<br>Parameter |Details
 --------- |-------
-user_name|*Define the new username being requested.*<br>Type:String, Order:1, Required=True
+user_name|*Define the new username being requested.  <b>A username must begin with 2 lowercase characters, followed by 3 or more digits and can have no spaces.</b>*<br>Type:String, Order:1, Required=True
 email|*Specify the email address of the associated user.*<br>Type:String, Order:2, Required:True <br><b>Note: '@' symbol must be URL encode, so change '@' to '%40'. Example: me%40mymail.com</b>  
 <b>Response Parameters |<b>Details</b>
 accepted|*Indicates that the request was legal or valid.*<br>This response field Type:Boolean, Order=1, Required=True  
@@ -199,7 +200,7 @@ Show headers -
 
 Request<br>Parameter |Details
 --------- |-------
-user_name|*Define the username being requested.*<br>Type:String, Order:1, Required=True
+user_name|*Define the username being requested. A username must begin with 2 lowercase alpha characters, followed by 3 or more digits and can have no spaces.*<br>Type:String, Order:1, Required=True
 level|*Specify the challenge level of the requested game.  Where 1=puzzles with 6 characters or less and level=2 represents puzzles with greater than 6 characters.*<br>Type:String, Order:2, Required:True <br>
 <b>Response Parameters |<b>Details</b>
 accepted|*Indicates that the request was legal or valid.*<br>This response field Type:Boolean, Order=1, Required=True  
@@ -292,7 +293,7 @@ headers:
 
 Request<br>Parameter |Details
 --------- |-------
-user_name|*Define the username being requested.*<br>Type:String, Order:1, Required=True
+user_name|*Define the username being requested. A username must begin with 2 lowercase alpha characters, followed by 3 or more digits and can have no spaces.*<br>Type:String, Order:1, Required=True
 <b>Response Parameters</b> |<b>Details</b>
 accepted|*Indicates that the request was legal or valid.*<br>This response field Type:Boolean, Order=1, Required=True  
 cause_code|*Indicates why request was not accepted.  See definition list of Cause Codes below.*<br>Type:Integer, Order=2, Required=False
@@ -321,7 +322,7 @@ headers:
 
 Request<br>Parameter |Details
 --------- |-------
-user_name|*Define the username being requested.*<br>Type:String, Order:1, Required=True
+user_name|*Define the username being requested. A username must begin with 2 lowercase alpha characters, followed by 3 or more digits and can have no spaces.*<br>Type:String, Order:1, Required=True
 puzzle|*Specify the puzzle to be added to the puzzle database.*<br>Type:String, Order:2, Required:True
 <b>Response Parameters</b> |<b>Details</b>
 accepted|*Indicates that the request was legal or valid.*<br>This response field Type:Boolean, Order=1, Required=True  
@@ -365,7 +366,7 @@ Show headers -
 
 Request<br>Parameter |Details
 --------- |-------
-user_name|*Define the username being requested.*<br>Type:String, Order:1, Required=True
+user_name|*Define the username being requested. A username must begin with 2 lowercase alpha characters, followed by 3 or more digits and can have no spaces.*<br>Type:String, Order:1, Required=True
 game_id|*Define the game_id about which the details are being requested.*<br>Type:String, Order:2, Required:True
 <b>Response Parameters</b> |<b>Details</b>
 accepted|*Indicates that the request was legal or valid.*<br>This response field Type:Boolean, Order=1, Required=True  
@@ -412,7 +413,7 @@ Show headers -
 
 Request<br>Parameter |Details
 --------- |-------
-user_name|*Define the username being requested.*<br>Type:String, Order:1, Required=True
+user_name|*Define the username being requested. A username must begin with 2 lowercase alpha characters, followed by 3 or more digits and can have no spaces.*<br>Type:String, Order:1, Required=True
 game_id|*Define the game_id about which the details are being requested.*<br>Type:String, Order:2, Required:True
 guess|*Specify the letter to be guessed for solving the puzzle.  Must be a single alpha character.*<br>Type:String, Order:3, Required:True
 <b>Response Parameters</b> |<b>Details</b>
@@ -451,7 +452,7 @@ Show headers -
 
 Request<br>Parameter |Details
 --------- |-------
-user_name|*Define the username being requested.*<br>Type:String, Order:1, Required=True
+user_name|*Define the username being requested. A username must begin with 2 lowercase alpha characters, followed by 3 or more digits and can have no spaces.*<br>Type:String, Order:1, Required=True
 game_id|*Define the game_id about which the details are being requested.*<br>Type:String, Order:2, Required:True
 <b>Response Parameters</b> |<b>Details</b>
 accepted|*Indicates that the request was legal or valid.*<br>This response field Type:Boolean, Order=1, Required=True  
@@ -501,8 +502,10 @@ Cause Code|Reason
 05|Guessed letter already in guess history  
 06|User name and game ID mismatch  
 07|Value provided for Guess is invalid  
-08|undefined  
-09|undefined  
+08|Invalid username  
+09|Invalid email address
+10|not defined
+11|not defined
 
 
 
