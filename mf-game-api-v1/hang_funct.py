@@ -11,6 +11,7 @@ from google.appengine.ext import ndb
 from hang_models import *
 from protorpc import remote, messages, message_types
 import random
+import re
 import string
 import webapp2
 
@@ -67,6 +68,48 @@ def get_puzzle(level):
             'length': final.length,
             'level': final.level}
 
+def validate_name(user, email):
+    ''' verify username & email address are unique and meet criteria.'''
+    # check username against rules:
+    # 1. must begin with two lowercase alpha characters
+    # 2. must be followed by from 2 to 4 digits
+    # 3. must not have any whitespace
+    # Check email address to be a valid email address format
+    acpt = True
+    rejCauseCode = 0
+    info = ""
+    if user:
+        # argument # 1 is username
+        userobj = re.match('[a-zA-Z]{2}\d[0-9]{2,4}', user)
+        emailobj = re.match('([\w\.]+)@([\w\.]+)\.(\w+)', email)
+        if userobj and emailobj:
+            # path if username and email address meet criteria
+            print userobj.group(0)
+            print emailobj.group(0)
+            # now check for uniqueness in database
+            uchek = User.query().filter(User.user_name == user).get()
+            # set response values
+            if uchek:
+                # path if username is already found in database
+                # failed path
+                acpt = False
+                rejCauseCode = 3  # requested user name already exists
+                info = 'A User with that name already exists!'
+        else:
+            # path if at least one (username or email) are invalid
+            if not userobj:
+                acpt = False
+                rejCauseCode = 8 # Invalid Username
+                info = "Invalid Username {} provided.".format(user)
+                print info
+            if not emailobj:
+                acpt = False
+                rejCauseCode = 9 # Invalid Email Adress
+                info = info + "Invalid email {} provided.".format(email)
+                print info
+    return {'acpt': acpt,
+            'rejCode': rejCauseCode,
+            'info': info}
 
 def validate_user(user):
     ''' accept the argument of a username and validate

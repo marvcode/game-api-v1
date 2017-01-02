@@ -7,5 +7,7 @@ valid Cause Code:
 05 = Guessed letter already in guess history
 06 = User name and game ID mismatch
 07 = Value provided for Guess is invalid
-08 = undefined
-09 = undefined
+08 = Invalid username
+09 = Invalid email address
+10 = not defined
+11 = not defined

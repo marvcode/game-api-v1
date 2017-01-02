@@ -32,6 +32,7 @@ from google.appengine.api import mail, app_identity
 from google.appengine.ext import ndb
 from protorpc import remote, messages, message_types
 import random
+import re
 import string
 import webapp2
 
@@ -54,26 +55,32 @@ class GameAdminApi(remote.Service):
     def create_user(self, request):
         """Create new user endpoint"""
         # /create_user/<username>
-        if User.query(User.user_name == request.user_name).get():
-            # path is requested user is already in database
-            acpt = False  # indicate request was not accepted
-            rejCauseCode = 3  # requested user name already exists
-            info = 'A User with that name already exists!'
-            raise endpoints.ConflictException(info)
-        else:
-            # path if requested username was NOT found in database
-            acpt = True
-            rejCauseCode = 0
-            info = "This will create a new "
+        # check requested username for proper format
+        if len(request.user_name) > 0:
+            vuser = validate_name(request.user_name, request.email)
+            acpt = vuser['acpt']
+            rejCauseCode = vuser['rejCode']
+            info = vuser['info']
+        if vuser['acpt'] is True:
+            # path if requested username was valid
+            acpt = vuser['acpt']
+            rejCauseCode = vuser['rejCode']
+            info = vuser['info'] + "This will create a new "
             info = info + "{} user per request.".format(request.user_name)
             user = User(user_name=request.user_name,
                         email=request.email,
                         high_score=0,
                         tot_score=0)
             user.put()
+        else:
+            # path is requested user is already in database
+            acpt = vuser['acpt']
+            rejCauseCode = vuser['rejCode']
+            info = vuser['info']
         return GenericResp(accepted=acpt,
                            cause_code=rejCauseCode,
                            resp_info=info)
+
 
     @endpoints.method(request_message=CREATE_GAME_REQ,
                       response_message=GenericResp,
