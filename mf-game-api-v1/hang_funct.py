@@ -99,12 +99,12 @@ def validate_name(user, email):
             # path if at least one (username or email) are invalid
             if not userobj:
                 acpt = False
-                rejCauseCode = 8 # Invalid Username
+                rejCauseCode = 8 #  Invalid Username
                 info = "Invalid Username {} provided.".format(user)
                 print info
             if not emailobj:
                 acpt = False
-                rejCauseCode = 9 # Invalid Email Adress
+                rejCauseCode = 9 #  Invalid Email Adress
                 info = info + "Invalid email {} provided.".format(email)
                 print info
     return {'acpt': acpt,
